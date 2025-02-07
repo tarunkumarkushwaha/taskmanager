@@ -1,0 +1,38 @@
+{
+  "expo": {
+    "name": "taskmanager",
+    "slug": "taskmanager",
+    "scheme": "taskmanager-scheme",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/taskmanager.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/images/taskmanager.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#171616"
+    },
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/taskmanager.png",
+        "backgroundColor": "#171616"
+      },
+      "package": "com.tarun_kumar_kushwaha.taskmanager"
+    },
+    "web": {
+      "bundler": "metro"
+    },
+    "plugins": [
+      "expo-router"
+    ],
+    "extra": {
+      "router": {
+        "origin": false
+      }
+    }
+  }
+}
