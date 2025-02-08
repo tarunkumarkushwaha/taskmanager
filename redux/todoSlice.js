@@ -4,7 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 export const loadTodos = createAsyncThunk('todo/loadTodos', async () => {
   const items = await AsyncStorage.getItem('items');
   return items ? JSON.parse(items) : [];
-  
+
 });
 
 // console.log("on")
@@ -18,8 +18,15 @@ const todoSlice = createSlice({
       AsyncStorage.setItem('items', JSON.stringify(state));
     },
     deleteTodo: (state, action) => {
-      state.splice(action.payload, 1);
-      AsyncStorage.setItem('items', JSON.stringify(state));
+      const todoIdToDelete = action.payload.id;
+      const index = state.findIndex(todo => todo.id === todoIdToDelete);
+
+      if (index !== -1) {
+        state.splice(index, 1);
+        AsyncStorage.setItem('items', JSON.stringify(state));
+      } else {
+        console.warn("Todo item not found for deletion:", todoIdToDelete);
+      }
     },
     deleteAll: (state) => {
       AsyncStorage.removeItem('items');
@@ -27,11 +34,21 @@ const todoSlice = createSlice({
     },
     modTodo: (state, action) => {
       const item = {
+        id: action.payload.id,
+        title: action.payload.title,
         data: action.payload.value,
-        completed: action.payload.check,
+        check: action.payload.check,
+        priority: action.payload.priority,
       };
-      state.splice(action.payload.id, 1, item);
-      AsyncStorage.setItem('items', JSON.stringify(state));
+      const todoIdToMod = action.payload.id;
+      const index = state.findIndex(todo => todo.id === todoIdToMod);
+
+      if (index !== -1) {
+        state.splice(index, 1, item);
+        AsyncStorage.setItem('items', JSON.stringify(state));
+      } else {
+        console.warn("Todo item not found for deletion:", todoIdToDelete);
+      }
     },
   },
   extraReducers: (builder) => {

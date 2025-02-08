@@ -1,59 +1,115 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+  Picker,
+} from "react-native";
 import { useDispatch } from "react-redux";
 import { deleteTodo, modTodo } from "../redux/todoSlice";
 
-const Todo = ({ item, i }) => {
+const Todo = ({ item, id }) => {
   const dispatch = useDispatch();
   const [isEditing, setIsEditing] = useState(false);
+  const [isEditingTitle, setIsEditingTitle] = useState(false);
+  const [title, setTitle] = useState(item.title);
   const [text, setText] = useState(item.data);
+  const [priority, setPriority] = useState(item.priority);
 
   const handleUpdate = () => {
-    dispatch(modTodo({ id: i, value: text, check: item.completed }));
+    dispatch(modTodo({ id: item.id, title, value: text, check: item.check, priority }));
     setIsEditing(false);
   };
 
+  const handleTitleUpdate = () => {
+    dispatch(modTodo({ id: item.id, title, value: text, check: item.check, priority }));
+    setIsEditingTitle(false);
+  };
+
+  const handlePriorityChange = (newPriority) => {
+    setPriority(newPriority);
+    dispatch(modTodo({ id: item.id, title, value: text, check: item.check, priority: newPriority }));
+  };
+
   return (
-    <View style={styles.container}>
-      <TouchableOpacity
-        style={[styles.checkbox, item.completed && styles.checked]}
-        onPress={() =>
-          dispatch(modTodo({ id: i, value: text, check: !item.completed }))
-        }
-      />
-      <Text style={styles.index}>{i + 1}.</Text>
-      <View style={styles.textcontainer}>
-      {isEditing ? (
-        <TextInput
-          style={styles.input}
-          value={text}
-          onChangeText={setText}
-          onBlur={handleUpdate}
-          onSubmitEditing={handleUpdate}
-          autoFocus
-          multiline
+    <View style={[styles.container,
+    item.check ? styles.containercheck : item.priority == "low" ? {
+      backgroundColor: "#D6F6D5"
+    } : item.priority == "medium" ? {
+      backgroundColor: "#ffe0cc"
+    } : item.priority == "high" ? {
+      backgroundColor: "#ffb3b3"
+    } : styles.containercheck
+    ]}>
+      <View style={styles.topRow}>
+        <TouchableOpacity
+          style={[styles.checkbox, item.check && styles.checked]}
+          onPress={() => dispatch(modTodo({ id: item.id, title, value: text, check: !item.check, priority }))}
         />
-      ) : (
-        <TouchableOpacity onPress={() => setIsEditing(true)}>
-          <Text style={[styles.text, item.completed && styles.completedText]}>
-            {text}
-          </Text>
+        <View style={styles.priorityContainer}>
+          <Text style={styles.priorityLabel}>Priority:</Text>
+          <Picker
+            selectedValue={priority}
+            style={styles.picker}
+            onValueChange={handlePriorityChange}
+          >
+            <Picker.Item label="Low" value="low" />
+            <Picker.Item label="Medium" value="medium" />
+            <Picker.Item label="High" value="high" />
+          </Picker>
+        </View>
+        <TouchableOpacity
+          style={styles.deleteButton}
+          onPress={() => { dispatch(deleteTodo({ id: item.id })); }}
+        >
+          <Text style={styles.deleteText}>X</Text>
         </TouchableOpacity>
-      )}
       </View>
-      <TouchableOpacity style={styles.deleteButton} onPress={() => dispatch(deleteTodo(item._id))}>
-        <Text style={styles.deleteText}>X</Text>
-      </TouchableOpacity>
+
+      <View style={styles.textContainer}>
+        {isEditingTitle ? (
+          <TextInput
+            style={styles.titleInput}
+            value={title}
+            onChangeText={setTitle}
+            onBlur={handleTitleUpdate}
+            onSubmitEditing={handleTitleUpdate}
+            autoFocus
+          />
+        ) : (
+          <TouchableOpacity onPress={() => setIsEditingTitle(true)}>
+            <Text style={styles.title}>{title}</Text>
+          </TouchableOpacity>
+        )}
+
+        {isEditing ? (
+          <TextInput
+            style={styles.input}
+            value={text}
+            onChangeText={setText}
+            onBlur={handleUpdate}
+            onSubmitEditing={handleUpdate}
+            autoFocus
+            multiline
+          />
+        ) : (
+          <TouchableOpacity onPress={() => setIsEditing(true)}>
+            <Text style={[styles.text, item.check && styles.completedText]}>
+              <Text style={styles.index}>{id + 1}.</Text> {text}
+            </Text>
+          </TouchableOpacity>
+        )}
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flexDirection: "row",
-    alignItems: "flex-start", 
-    backgroundColor: "#FFF",
-    padding: 20,
+    // backgroundColor: "#FFF",
+    padding: 15,
     borderRadius: 12,
     borderWidth: 1,
     borderColor: "#ddd",
@@ -62,45 +118,77 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
-    elevation: 3,
-    flexWrap: "wrap", 
+    elevation: 5,
+    shadowColor: 'black',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
   },
-  textcontainer: {
-    flex: 1, 
-    flexDirection: "column",
+  containercheck: {
+    backgroundColor: "#b3b3b3"
+  },
+  topRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: 10,
+  },
+  textContainer: {
+    flex: 1,
   },
   checkbox: {
-    width: 24,
-    height: 24,
+    width: 20,
+    height: 20,
     borderWidth: 2,
     borderColor: "#43A047",
     borderRadius: 6,
-    marginRight: 12,
+    marginRight: 8,
     alignItems: "center",
     justifyContent: "center",
   },
   checked: {
     backgroundColor: "#43A047",
-    borderColor: "#43A047",
   },
-  index: {
-    fontWeight: "bold",
-    fontSize: 18,
+  priorityContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    margin: 10
+  },
+  priorityLabel: {
+    fontSize: 14,
     color: "#555",
-    marginRight: 12,
+    marginRight: 5,
+  },
+  picker: {
+    height: 50,
+    // width: "100%",
+    color: "#333",
+    backgroundColor: "#FFF",
+    borderRadius: 5,
+    paddingHorizontal: 10,
   },
   input: {
-    flex: 1, 
-    fontSize: 20,
+    fontSize: 16,
     borderBottomWidth: 1,
-    borderColor: "#FFF",
+    borderColor: "#ddd",
     paddingVertical: 3,
     borderWidth: 0,
     outlineStyle: "none",
+    width: "80%",
+    paddingLeft: 40
+  },
+  titleInput: {
+    fontSize: 18,
+    borderWidth: 0,
+    outlineStyle: "none",
+    fontWeight: "bold",
+    borderBottomWidth: 1,
+    borderColor: "#ddd",
+    textAlign: "center",
   },
   text: {
     fontSize: 16,
-    color: "#333",
+    color: "black",
     flexShrink: 1,
   },
   completedText: {
@@ -109,19 +197,30 @@ const styles = StyleSheet.create({
     flexShrink: 1,
   },
   deleteButton: {
-    position: "absolute",
-    right: 5,
-    top: 10,
-    padding: 8,
-    borderRadius: 20,
-    backgroundColor: "#FF5252",
+    padding: 6,
+    borderRadius: 15,
+    backgroundColor: "#b30000",
   },
   deleteText: {
     color: "#FFF",
     fontWeight: "bold",
-    fontSize: 16,
+    fontSize: 14,
+  },
+  index: {
+    fontWeight: "bold",
+    fontSize: 18,
+    color: "#555",
+    marginRight: 12,
+  },
+  title: {
+    flex: 1,
+    textAlign: "center",
+    fontWeight: "bold",
+    fontSize: 18,
+    color: "#555",
+    margin: 5,
   },
 });
 
-
 export default Todo;
+

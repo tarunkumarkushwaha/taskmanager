@@ -1,17 +1,13 @@
 import { Image, StyleSheet } from "react-native";
 import React from "react";
 import { View, Text, TouchableOpacity } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { useRouter } from "expo-router";
 
-export default function HomeScreen() {
-  const navigation = useNavigation();
+export default function AboutScreen() {
+  const router = useRouter();
 
-  const goTasks = () => {
-    navigation.navigate("tasks");
-  };
-
-  const goToAboutPage = () => {
-    navigation.navigate("about");
+  const goToHomePage = () => {
+    router.dismissAll();
   };
 
   return (
@@ -25,18 +21,15 @@ export default function HomeScreen() {
       <View style={styles.overlay} />
       <Text style={styles.logoText}>T taskmanager</Text>
       <View style={styles.contentContainer}>
-        <Text style={styles.description}>
-          A powerful taskmanager on the go.
-        </Text>
+
+        <Text style={styles.title}>Features:</Text>
+        <Text style={styles.description}>- add a new task (title, description, priority(Low, Medium, High)).</Text>
+        <Text style={styles.description}>- No ads</Text>
       </View>
 
       <View style={styles.buttonContainer}>
-          <TouchableOpacity onPress={goTasks} style={styles.startButton}>
-            <Text style={styles.buttonText}>Start</Text>
-          </TouchableOpacity>
-  
-        <TouchableOpacity onPress={goToAboutPage} style={styles.aboutButton}>
-          <Text style={styles.aboutButtonText}>About</Text>
+        <TouchableOpacity onPress={goToHomePage} style={styles.aboutButton}>
+          <Text style={styles.aboutButtonText}>Back To home</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -100,7 +93,7 @@ const styles = StyleSheet.create({
     bottom: 80,
     alignSelf: "center",
   },
-  startButton: {
+  startTestButton: {
     backgroundColor: "#ffff",
     paddingVertical: 24,
     paddingHorizontal: 32,
@@ -109,18 +102,26 @@ const styles = StyleSheet.create({
     boxShadow: "0px 3px 5px rgba(0, 0, 0, 0.3)",
     marginBottom: 10,
   },
+  moreDetailsButton: {
+    backgroundColor: "#333333",
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderRadius: 25,
+    alignItems: "center",
+    boxShadow: "0px 3px 5px rgba(0, 0, 0, 0.3)",
+    marginBottom: 10,
+  },
   aboutButton: {
-    backgroundColor: "rgba(0, 0, 0, 0)",
-    paddingVertical: 6,
+    backgroundColor: "white",
+    paddingVertical: 12,
     paddingHorizontal: 24,
     borderRadius: 25,
     alignItems: "center",
     boxShadow: "0px 3px 5px rgba(0, 0, 0, 0.3)",
   },
   aboutButtonText: {
-    color: "white",
-    textDecorationLine: "underline",
-    fontSize: 14,
+    fontSize: 18,
     fontWeight: "bold",
   },
 });
+
