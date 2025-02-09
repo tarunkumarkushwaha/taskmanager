@@ -23,7 +23,8 @@ export default function HomeScreen() {
       />
 
       <View style={styles.overlay} />
-      <Text style={styles.logoText}>T taskmanager</Text>
+      <Text style={styles.logoText}>T</Text>
+      <Text style={styles.logoText}>task manager</Text>
       <View style={styles.contentContainer}>
         <Text style={styles.description}>
           A powerful taskmanager on the go.

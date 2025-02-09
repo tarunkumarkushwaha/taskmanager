@@ -1,16 +1,20 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { View, ScrollView, SafeAreaView } from "react-native";
+import { View, ScrollView, SafeAreaView, Alert } from "react-native";
 import { loadTodos, addTodo } from "../redux/todoSlice";
 import Todo from "../components/Todo";
 import { Picker } from "@react-native-picker/picker";
-import { Text, TextInput, Button, Card, Divider } from 'react-native-paper';
+import { Text, TextInput, Button, Card } from 'react-native-paper';
+import DatePicker from "../components/DatePicker";
+import moment from "moment";
 
 
 export default function Tasks() {
+    const [date, setDate] = useState(Date.now());
+    const [dateModal, setdateModal] = useState(false);
     const [priority, setPriority] = useState("medium");
     const [title, settitle] = useState("");
-    const [item, setItem] = useState({ id: Date.now(), title: "", data: "", check: false, priority: "medium" });
+    const [item, setItem] = useState({ id: Date.now(), title: "", data: "", check: false, priority: "medium", due: date });
     const [filterPriority, setFilterPriority] = useState("all");
     const [filterCompletion, setFilterCompletion] = useState("all");
     const dispatch = useDispatch();
@@ -29,13 +33,17 @@ export default function Tasks() {
     };
 
     const handleAddTodo = () => {
-        if (item.data.trim() !== "") {
-            dispatch(addTodo({ ...item, id: Date.now(), priority, title }));
-            setItem({ id: Date.now(), title, data: "", check: false, priority });
+        if (item.data.trim() !== "" || item.title.trim() !== "") {
+            dispatch(addTodo({ ...item, id: Date.now(), priority, title, date }));
+            setItem({ id: Date.now(), title, data: "", check: false, priority, due: date });
             settitle("")
             dispatch(loadTodos())
-        }
+        } else {Alert.alert("Error", "Enter title or description"); }
     };
+
+    const dateChange = (data) => {
+        setDate(data)
+    }
     // console.log(todos)
 
 
@@ -65,6 +73,9 @@ export default function Tasks() {
                             <Picker.Item label="Medium" value="medium" />
                             <Picker.Item label="High" value="high" />
                         </Picker>
+                        <Text >Due date: {moment(date).format("YYYY-MM-DD")}</Text>
+                        <Button mode="contained" textColor="white" onPress={() => setdateModal(!dateModal)} style={{ marginTop: 10, borderRadius: 10, backgroundColor: "#1f004d" }}>Select Date</Button>
+                        <DatePicker visible={dateModal} onClose={() => setdateModal(!dateModal)} date={date} onSelectDate={dateChange} />
                         <TextInput label="Enter your task..." style={{ marginBlock: 15, borderRadius: 10 }} value={item.data} onChangeText={handleChange} />
                         <Button mode="contained" textColor="white" onPress={handleAddTodo} style={{ marginTop: 10, borderRadius: 10, backgroundColor: "#1f004d" }}>Add</Button>
                     </Card.Content>

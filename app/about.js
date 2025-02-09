@@ -20,17 +20,24 @@ export default function AboutScreen() {
 
       <View style={styles.overlay} />
       <Text style={styles.logoText}>T taskmanager</Text>
+      <Text style={styles.title}>Features:</Text>
       <View style={styles.contentContainer}>
 
-        <Text style={styles.title}>Features:</Text>
-        <Text style={styles.description}>- add a new task (title, description, priority(Low, Medium, High)).</Text>
+
+        <Text style={styles.description}>- Add a new task with a title, description, and priority level.</Text>
+        <Text style={styles.description}>- View a list of tasks in a scrollable list. </Text>
+        <Text style={styles.description}>- Edit existing tasks. </Text>
+        <Text style={styles.description}>- Delete tasks. </Text>
+        <Text style={styles.description}>- Add due date for tasks. </Text>
+        <Text style={styles.description}>- Mark tasks as completed using a checkbox. </Text>
+        <Text style={styles.description}>- local task persistence. </Text>
         <Text style={styles.description}>- No ads</Text>
       </View>
 
       <View style={styles.buttonContainer}>
-        <TouchableOpacity onPress={goToHomePage} style={styles.aboutButton}>
+        {/* <TouchableOpacity onPress={goToHomePage} style={styles.aboutButton}>
           <Text style={styles.aboutButtonText}>Back To home</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
     </View>
   );
@@ -71,7 +78,7 @@ const styles = StyleSheet.create({
   },
   contentContainer: {
     padding: 20,
-    alignItems: "center",
+    alignItems: "flex-start",
   },
   title: {
     fontSize: 32,

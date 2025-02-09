@@ -39,6 +39,7 @@ const todoSlice = createSlice({
         data: action.payload.value,
         check: action.payload.check,
         priority: action.payload.priority,
+        due: action.payload.due,
       };
       const todoIdToMod = action.payload.id;
       const index = state.findIndex(todo => todo.id === todoIdToMod);

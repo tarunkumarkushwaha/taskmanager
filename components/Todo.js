@@ -4,6 +4,7 @@ import { Card, Checkbox, Button, Text, Menu } from "react-native-paper";
 import { useDispatch } from "react-redux";
 import { deleteTodo, modTodo } from "../redux/todoSlice";
 import { Picker } from "@react-native-picker/picker";
+import moment from "moment";
 
 const Todo = ({ item, id }) => {
   const dispatch = useDispatch();
@@ -88,6 +89,10 @@ const Todo = ({ item, id }) => {
           </Button>
         </View>
 
+        <Text style={{ fontSize: 15, textAlign: "center", margin: 10 }}>
+
+          Due date: {moment(item.due).format("YYYY-MM-DD")}</Text>
+
         {isEditingTitle ? (
           <TextInput
             style={{ fontSize: 18, fontWeight: "bold", textAlign: "center", borderBottomWidth: 1 }}
@@ -100,6 +105,7 @@ const Todo = ({ item, id }) => {
         ) : (
           <TouchableOpacity onPress={() => setIsEditingTitle(true)}>
             <Text variant="titleMedium" style={{ fontSize: 25, textAlign: "center", color: "black", marginBlock: 10 }}>
+              <Text style={{ fontSize: 25, textAlign: "center", fontWeight: "bold" }}>{id + 1}. </Text>
               {title}
             </Text>
           </TouchableOpacity>
@@ -117,12 +123,19 @@ const Todo = ({ item, id }) => {
           />
         ) : (
           <TouchableOpacity onPress={() => setIsEditing(true)}>
-            <Text
-              variant="bodyMedium"
-              style={{ textDecorationLine: item.check ? "line-through" : "none", color: item.check ? "#888" : "black" }}
-            >
-              {text}
-            </Text>
+            <Card style={{ margin: 8, padding: 12, backgroundColor: "#f5f5f5", borderRadius: 10, elevation: 3 }}>
+              <Text
+                variant="bodyMedium"
+                style={{
+                  textDecorationLine: item.check ? "line-through" : "none",
+                  color: item.check ? "#888" : "black",
+                  fontSize: 16,
+                  fontWeight: "500",
+                }}
+              >
+                <Text style={{ color: "#888" }}>desc: </Text>{text}
+              </Text>
+            </Card>
           </TouchableOpacity>
         )}
       </Card.Content>
