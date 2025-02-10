@@ -49,13 +49,12 @@ Ensure you have the following installed:
 
 4. Use the Expo Go app to scan the QR code and run the app on your mobile device.
 
-app is deployed on amazon appstore
-it is currently under review by amazon will be available by 14 feb
-app will appear in my app list on amazon app store
-https://www.amazon.in/s?i=mobile-apps&rh=p_4%3Atarun&search-type=ss
+i have deployed app on amazon appstore
+https://www.amazon.in/tarun-T-task-manager/dp/B0DWKQFNFF/ref=sr_1_3?dib=eyJ2IjoiMSJ9.19zFS3VG6Wnmos9oq62aw-Ogbi4Zsu4A0KolTeBH877GjHj071QN20LucGBJIEps.K6qZL2Y5uW-x4vnLzyY6UqNgk4niWZFxFV1j_bllntM&dib_tag=se&qid=1739205308&refinements=p_4%3Atarun&s=mobile-apps&search-type=ss&sr=1-3
 
 to download app sidesload amazon appstore for android 
-and sign in to amazon account then download
+and sign in to amazon account then download 
+or download via pc
 
 
 
